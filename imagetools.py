@@ -28,12 +28,12 @@ def xyTransform(boxes, height, width):
             for k in range(nc):
                 centerX = (j + boxes[i, j, k, 0]) * single_w
                 centerY = (i + boxes[i, j, k, 1]) * single_h
-                width_half = boxes[i, j, k, 2] * boxes[i, j, k, 2] * width / 2
-                height_half = boxes[i, j, k, 3] * boxes[i, j, k, 3] * height / 2
-                boxes_cp[i, j, k, 0] = centerX - width_half
-                boxes_cp[i, j, k, 1] = centerY - height_half
-                boxes_cp[i, j, k, 2] = centerX + width_half
-                boxes_cp[i, j, k, 3] = centerY + height_half
+                width_half = boxes[i, j, k, 2] * width / 2
+                height_half = boxes[i, j, k, 3] * height / 2
+                boxes_cp[i, j, k, 0] = max(centerX - boxes[i, j, k, 2] * width_half, 0)
+                boxes_cp[i, j, k, 1] = max(centerY - boxes[i, j, k, 3] * height_half, 0)
+                boxes_cp[i, j, k, 2] = min(centerX + width_half, width)
+                boxes_cp[i, j, k, 3] = min(centerY + height_half, height)
     print('xyTransform is OK...')
     return boxes_cp
 
